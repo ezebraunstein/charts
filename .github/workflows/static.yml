@@ -26,6 +26,10 @@ jobs:
         with:
           version: v3.10.2
 
+      - name: Prepare docs directory
+        run: |
+          rm -rf /tmp/docs && mkdir -p /tmp/docs
+
       - name: Package Helm chart
         run: |
           helm package integrador-chart
@@ -33,7 +37,6 @@ jobs:
 
       - name: Update Helm repo index
         run: |
-          mkdir -p /tmp/docs
           helm repo index /tmp/docs --url https://ezebraunstein.github.io/charts/
 
       - name: Upload artifact to Pages
