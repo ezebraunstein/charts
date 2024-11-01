@@ -1,7 +1,7 @@
 apiVersion: v2
 name: integrador-chart
 description: A Helm chart for deploying a Python app with PostgreSQL
-version: 0.2.0
+version: 0.1.2
 dependencies:
   - name: postgresql
     version: 12.1.9
