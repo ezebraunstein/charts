@@ -1,0 +1,16 @@
+apiVersion: v1
+entries:
+  integrador-chart:
+  - apiVersion: v2
+    created: "2024-11-01T12:02:54.109250164-03:00"
+    dependencies:
+    - name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.1.9
+    description: A Helm chart for deploying a Python app with PostgreSQL
+    digest: 3a2810dc14ab37227068b6cb7160371c0ae030d3240b7469d8a60153606fa378
+    name: integrador-chart
+    urls:
+    - https://ezebraunstein.github.io/charts/integrador-chart-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-11-01T12:02:54.102462386-03:00"
