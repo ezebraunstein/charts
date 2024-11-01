@@ -29,13 +29,6 @@ jobs:
       - name: Prepare docs directory
         run: |
           rm -rf /tmp/docs && mkdir -p /tmp/docs
-          
-      - name: Download existing index.yaml from gh-pages
-        run: |
-          git fetch origin gh-pages:gh-pages
-          git checkout gh-pages
-          cp docs/index.yaml /tmp/docs/index.yaml || touch /tmp/docs/index.yaml
-        shell: bash
 
       - name: Package Helm chart
         run: |
@@ -44,7 +37,7 @@ jobs:
 
       - name: Update Helm repo index
         run: |
-          helm repo index /tmp/docs --merge /tmp/docs/index.yaml --url https://ezebraunstein.github.io/charts/
+          helm repo index /tmp/docs --url https://ezebraunstein.github.io/charts/
 
       - name: Upload artifact to Pages
         uses: actions/upload-pages-artifact@v3
