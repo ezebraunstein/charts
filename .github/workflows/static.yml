@@ -1,0 +1,46 @@
+name: Deploy Helm Chart to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.10.2
+
+      - name: Package Helm chart
+        run: |
+          helm package integrador-chart
+          mv integrador-chart-*.tgz /tmp/docs
+
+      - name: Update Helm repo index
+        run: |
+          mkdir -p /tmp/docs
+          helm repo index /tmp/docs --url https://ezebraunstein.github.io/charts/
+
+      - name: Upload artifact to Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: /tmp/docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
