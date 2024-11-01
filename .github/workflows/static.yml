@@ -33,7 +33,6 @@ jobs:
 
       - name: Update Helm repo index
         run: |
-          mkdir -p /tmp/docs
           helm repo index /tmp/docs --url https://ezebraunstein.github.io/charts/
 
       - name: Upload artifact to Pages
