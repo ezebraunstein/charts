@@ -1,0 +1,28 @@
+app:
+  database:
+    host: postgresql
+    port: 5432
+    name: postgres
+
+image:
+  repository: sebastian677/integradorcraftech
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+postgresql:
+  enabled: true
+  auth:
+    existingSecret: vault-secret         
+    usernameKey: postgres-user                    
+    passwordKey: postgres-password
+    database: postgres
+  pgHbaConfiguration: |
+    host all all 0.0.0.0/0 md5 
+
+ingress:
+  enabled: true
+  hostname: integrador.craftech.io

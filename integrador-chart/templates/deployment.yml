@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-app
+  template:
+    metadata:
+      labels:
+        app: python-app
+    spec:
+      containers:
+        - name: app
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE
+              value: "postgres"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: vault-secret  
+                  key: postgres-user          
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: vault-secret
+                  key: postgres-password  
+            - name: DB_HOST
+              value: "{{ .Release.Name }}-postgresql"
+            - name: DB_PORT
+              value: {{ .Values.app.database.port | quote }}
+            - name: DB_NAME
+              value: {{ .Values.postgresql.auth.database | quote }}
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Waiting for PostgreSQL to start...";
+              until nc -z ${DB_HOST} ${DB_PORT}; do
+                sleep 0.1;
+              done;
+              echo "PostgreSQL started";
+              python manage.py migrate && python manage.py runserver 0.0.0.0:8000;

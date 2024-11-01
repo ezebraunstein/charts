@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: python-app-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+    - host: {{ .Values.ingress.hostname }}
+      http:
+        paths:
+          - path: /()(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: python-app
+                port:
+                  number: {{ .Values.service.port }}
